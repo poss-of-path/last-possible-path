@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Last Possible Path</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #111111;
+    --white: #ffffff;
+    --gray-light: #f5f5f5;
+    --gray-mid: #e0e0e0;
+    --gray-dark: #888;
+    --accent: #111;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    padding: 60px 32px;
+    flex-direction: column;
+    justify-content: center;
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── STEP INDICATOR ── */
+  .step-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 48px;
+  }
+  .step-dot {
+    height: 3px;
+    flex: 1;
+    background: #e0e0e0;
+    border-radius: 2px;
+    transition: background 0.4s;
+  }
+  .step-dot.done { background: #111; }
+
+  /* ── LABEL ── */
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 16px;
+  }
+
+  /* ── HEADLINE ── */
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 7vw, 48px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #111;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4.5vw, 27px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: #111;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  /* ── CHOICES ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .choice-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+  }
+  .choice-btn:hover {
+    border-color: #111;
+    background: #f9f9f9;
+    transform: translateX(4px);
+  }
+  .choice-btn.selected {
+    border-color: #111;
+    background: #111;
+    color: #fff;
+  }
+  .choice-btn .icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 32px;
+    text-align: center;
+  }
+  .choice-btn .label {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .choice-btn .desc {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .choice-btn.selected .desc { color: #bbb; }
+
+  /* ── PRIMARY BUTTON ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+  .btn-primary:hover { background: #333; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 40px;
+    height: 2px;
+    background: #111;
+    margin-bottom: 28px;
+  }
+
+  /* ── BACK LINK ── */
+  .back-link {
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+    margin-bottom: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .back-link:hover { color: #111; }
+
+  /* ── START SCREEN ── */
+  #screen-start .big-serif {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 10vw, 66px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #111;
+    margin-bottom: 24px;
+  }
+  #screen-start .big-serif em {
+    font-style: italic;
+    color: #555;
+  }
+
+  /* ── RESULT SCREEN ── */
+  .result-clue-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 16px;
+  }
+
+  .clue-box {
+    border: 1.5px solid #111;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 160px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .clue-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #111;
+  }
+  .clue-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 100px;
+    font-weight: 700;
+    color: #111;
+    line-height: 1;
+    letter-spacing: -4px;
+  }
+
+  .result-card {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 24px 22px;
+    margin-bottom: 24px;
+  }
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 10px;
+  }
+  .result-scene {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+    font-family: 'Inter', sans-serif;
+  }
+  .result-scene strong { color: #111; font-weight: 600; }
+
+  .fate-note {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #888;
+    margin-top: 0;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .replay-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: transparent;
+    color: #111;
+    border: 1.5px solid #111;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .replay-btn:hover { background: #111; color: #fff; }
+
+  /* path progress mini-map */
+  .path-trail {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .path-node {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    flex-shrink: 0;
+  }
+  .path-node.visited { background: #111; }
+  .path-line {
+    flex: 1;
+    min-width: 12px;
+    height: 1px;
+    background: #e0e0e0;
+  }
+  .path-line.visited { background: #111; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ SCREEN: START ══════════════════ -->
+<div id="screen-start" class="screen active">
+  <p class="eyebrow">Last Possible Path</p>
+  <div class="big-serif">Every<br>choice<br><em>leads here.</em></div>
+  <p class="subtitle">Six moments. Three directions each.<br>No matter where you turn — a clue has always been waiting for you at the end.</p>
+  <button class="btn-primary" onclick="startGame()">Begin &rarr;</button>
+</div>
+
+<!-- ══════════════════ SCREEN: QUESTION ══════════════════ -->
+<div id="screen-question" class="screen">
+  <div class="step-bar" id="q-step-bar"></div>
+  <p class="eyebrow" id="q-eyebrow">Moment 1 of 6</p>
+
+  <div class="path-trail" id="q-path-trail"></div>
+
+  <h2 id="q-title">—</h2>
+  <p class="subtitle" id="q-context">—</p>
+
+  <div class="choices" id="q-choices"></div>
+</div>
+
+<!-- ══════════════════ SCREEN: RESULT ══════════════════ -->
+<div id="screen-result" class="screen">
+  <div class="step-bar">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+  </div>
+
+  <p class="result-clue-label">In this path, you've possibly met one of the clue</p>
+  <div class="clue-box">
+    <div class="clue-letter" id="res-letter">—</div>
+  </div>
+
+  <div class="result-card">
+    <div class="result-title" id="res-ending-title">—</div>
+    <div class="result-scene" id="res-scene">—</div>
+  </div>
+
+  <p class="fate-note" id="res-fate">—</p>
+
+  <button class="replay-btn" onclick="restart()">↩ Try another path</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   QUESTION TREE
+   6 questions, each 3 choices.
+   Choices carry weights toward endings: M A R N I
+   Ending is decided by majority weight after 6 answers.
+   Weights per choice: each option nudges 1–2 endings.
+═══════════════════════════════════════════════ */
+
+const QUESTIONS = [
+  {
+    title: "It's late afternoon. You see someone sitting alone at the café you always go to — reading a book you love.",
+    context: "They haven't noticed you yet. What do you do?",
+    choices: [
+      { icon: "📖", label: "Sit nearby and say nothing", desc: "Maybe the book will speak for itself.", weights: { M: 2, N: 1 } },
+      { icon: "💬", label: "Walk over and mention the book", desc: "It's the perfect opening, and you know it.", weights: { A: 2, R: 1 } },
+      { icon: "☕", label: "Order your usual and wait", desc: "If it's meant to happen, it will.", weights: { I: 2, N: 1 } }
+    ]
+  },
+  {
+    title: "You're both caught in the same sudden rain, standing under the same narrow awning.",
+    context: "It's awkward, but somehow comfortable. They glance at you.",
+    choices: [
+      { icon: "😶", label: "Look away and check your phone", desc: "You're not ready for eye contact yet.", weights: { N: 2, M: 1 } },
+      { icon: "🌧️", label: "Laugh about the rain together", desc: "Shared discomfort is half a friendship.", weights: { R: 2, A: 1 } },
+      { icon: "🎧", label: "Offer one earbud without a word", desc: "Sometimes music says what words can't.", weights: { M: 2, I: 1 } }
+    ]
+  },
+  {
+    title: "A mutual friend's gathering. You end up on the same side of the room, both clearly not enjoying small talk.",
+    context: "There's a quiet corner by the window. What happens next?",
+    choices: [
+      { icon: "🪟", label: "Gravitate there without planning to", desc: "Your feet just moved.", weights: { I: 2, M: 1 } },
+      { icon: "🙋", label: "Suggest you both escape to the balcony", desc: "A quiet proposal, half-joke.", weights: { A: 2, R: 1 } },
+      { icon: "🎭", label: "Stay and observe them from a distance", desc: "You learn more watching than talking.", weights: { N: 2, I: 1 } }
+    ]
+  },
+  {
+    title: "They accidentally leave something behind. You find it after they're gone.",
+    context: "A small object. Nothing valuable — but clearly theirs.",
+    choices: [
+      { icon: "📦", label: "Keep it, hoping they come back for it", desc: "A reason to meet again.", weights: { M: 2, A: 1 } },
+      { icon: "🏃", label: "Chase them down immediately", desc: "You don't think twice.", weights: { R: 2, N: 1 } },
+      { icon: "📝", label: "Leave it with a note, no name", desc: "Anonymous and a little poetic.", weights: { I: 2, M: 1 } }
+    ]
+  },
+  {
+    title: "You cross paths again — third time this week. They notice it too.",
+    context: "The air between you shifts. Something is about to be said.",
+    choices: [
+      { icon: "😌", label: "Smile and let them speak first", desc: "Patience is its own kind of confidence.", weights: { N: 2, I: 1 } },
+      { icon: "✨", label: "Say — 'We keep meeting like this.'", desc: "Simple. True. Everything.", weights: { A: 2, M: 1 } },
+      { icon: "🌀", label: "Pretend you haven't counted", desc: "You have. You absolutely have.", weights: { R: 2, I: 1 } }
+    ]
+  },
+  {
+    title: "The last possible moment. A door is about to close — literally or not.",
+    context: "You have one thing left you could do.",
+    choices: [
+      { icon: "🚪", label: "Walk through it before it shuts", desc: "Whatever's on the other side, you'll find out.", weights: { R: 2, A: 1 } },
+      { icon: "🤐", label: "Hold the door open and say nothing", desc: "The gesture is the message.", weights: { M: 2, N: 1 } },
+      { icon: "💌", label: "Slip something into their hand and leave", desc: "Let them decide what it means.", weights: { I: 2, R: 1 } }
+    ]
+  }
+];
+
+/* ═══════════════════════════════════════════════
+   ENDINGS — 5 letters: M A R N I
+═══════════════════════════════════════════════ */
+
+const ENDINGS = {
+  M: {
+    letter: "M",
+    title: "The Moment Between Words",
+    scene: `Every path you took was <strong>quiet</strong> — measured, intentional, unhurried. You didn't chase. You <strong>held space</strong>. And in that space, something settled between you without needing a name. They knew. You knew. The silence was full.`,
+    fate: "M is for the moment that doesn't announce itself — it just arrives, and you were still enough to feel it."
+  },
+  A: {
+    letter: "A",
+    title: "The Arrival",
+    scene: `You <strong>moved first</strong>. You spoke first. You closed distances before they had a chance to grow. And they responded — not because they had to, but because your <strong>honesty made it easy</strong>. You didn't wait for a sign. You became one.`,
+    fate: "A is for the one who arrives — not late, not early. Exactly when they're supposed to."
+  },
+  R: {
+    letter: "R",
+    title: "The Return",
+    scene: `Something about your path kept <strong>circling back</strong>. Not a mistake — a rhythm. You moved toward and away, uncertain and then sure, and in that arc you found something more honest than a straight line ever could be. <strong>You came back</strong>. So did they.`,
+    fate: "R is for return — because the most meaningful things don't arrive in straight lines."
+  },
+  N: {
+    letter: "N",
+    title: "The Not-Yet",
+    scene: `You held back. You <strong>watched more than you moved</strong>. Not from fear — from a kind of careful wonder. This path didn't end in a confession or a grand gesture. It ended in <strong>possibility</strong>, intact, unruined, quietly waiting. Not every story needs its next chapter today.`,
+    fate: "N is for not yet — the most gentle and most honest ending there is."
+  },
+  I: {
+    letter: "I",
+    title: "The Impression",
+    scene: `You left something behind — a note, a song, a look that lasted a second too long. <strong>You were felt before you were known</strong>. They carried you in a small way they couldn't explain. This path didn't end with you together. It ended with you <strong>unforgettable</strong>.`,
+    fate: "I is for impression — the kind that stays without asking permission."
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════════ */
+
+let currentQ = 0;
+let scores = { M: 0, A: 0, R: 0, N: 0, I: 0 };
+let selectedChoice = null;
+
+function startGame() {
+  currentQ = 0;
+  scores = { M: 0, A: 0, R: 0, N: 0, I: 0 };
+  selectedChoice = null;
+  renderQuestion();
+  go('screen-question');
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+
+  // step bar
+  const bar = document.getElementById('q-step-bar');
+  bar.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i < currentQ ? ' done' : '');
+    bar.appendChild(dot);
+  }
+
+  // eyebrow
+  document.getElementById('q-eyebrow').textContent = `Moment ${currentQ + 1} of ${total}`;
+
+  // path trail
+  const trail = document.getElementById('q-path-trail');
+  trail.innerHTML = '';
+  for (let i = 0; i <= total; i++) {
+    const node = document.createElement('div');
+    node.className = 'path-node' + (i <= currentQ ? ' visited' : '');
+    trail.appendChild(node);
+    if (i < total) {
+      const line = document.createElement('div');
+      line.className = 'path-line' + (i < currentQ ? ' visited' : '');
+      trail.appendChild(line);
+    }
+  }
+
+  // question
+  document.getElementById('q-title').textContent = q.title;
+  document.getElementById('q-context').textContent = q.context;
+
+  // choices
+  const container = document.getElementById('q-choices');
+  container.innerHTML = '';
+  selectedChoice = null;
+
+  q.choices.forEach((c, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `
+      <span class="icon">${c.icon}</span>
+      <div>
+        <div class="label">${c.label}</div>
+        <div class="desc">${c.desc}</div>
+      </div>`;
+    btn.onclick = () => {
+      if (selectedChoice !== null) return; // prevent double-tap
+      container.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedChoice = idx;
+      setTimeout(nextQuestion, 520);
+    };
+    container.appendChild(btn);
+  });
+}
+
+function nextQuestion() {
+  if (selectedChoice === null) return;
+
+  // accumulate weights
+  const weights = QUESTIONS[currentQ].choices[selectedChoice].weights;
+  for (const [key, val] of Object.entries(weights)) {
+    scores[key] = (scores[key] || 0) + val;
+  }
+
+  currentQ++;
+
+  if (currentQ >= QUESTIONS.length) {
+    showResult();
+  } else {
+    renderQuestion();
+    // re-trigger animation
+    const screen = document.getElementById('screen-question');
+    screen.classList.remove('active');
+    void screen.offsetWidth;
+    screen.classList.add('active');
+  }
+}
+
+function showResult() {
+  // find ending with highest score; tie-break = first in M A R N I order
+  const order = ['M', 'A', 'R', 'N', 'I'];
+  let winner = order[0];
+  for (const key of order) {
+    if (scores[key] > scores[winner]) winner = key;
+  }
+
+  const ending = ENDINGS[winner];
+  document.getElementById('res-letter').textContent = ending.letter;
+  document.getElementById('res-ending-title').textContent = ending.title;
+  document.getElementById('res-scene').innerHTML = ending.scene;
+  document.getElementById('res-fate').textContent = ending.fate;
+
+  go('screen-result');
+}
+
+function go(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+}
+
+function restart() {
+  go('screen-start');
+}
+</script>
+</body>
+</html>
