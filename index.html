@@ -70,7 +70,7 @@
     text-align: center;
   }
   #screen-main .big-serif {
-    font-size: clamp(20px, 5vw, 32px);
+    font-size: clamp(28px, 7vw, 44px);
     margin-bottom: 16px;
   }
 
@@ -333,24 +333,26 @@
   /* ── RESULT BUTTONS ── */
   .result-btns {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
   }
   .replay-btn {
+    flex: 1;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 12px 24px;
+    padding: 12px 10px;
     background: transparent;
     color: #111;
     border: 1.5px solid #111;
     border-radius: 4px;
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
-    align-self: flex-start;
+    text-align: center;
   }
   .replay-btn:hover { background: #111; color: #fff; }
   .replay-btn.primary-btn {
@@ -481,7 +483,7 @@
 <div id="screen-main" class="screen active">
   <p class="eyebrow" style="text-align:center;">Welcome to</p>
   <div class="big-serif">Last Possible <em>Path.</em></div>
-  <p class="subtitle" style="text-align:center;">Two ways in. One ending.<br>Search the clues or submit your answer — every path leads here.</p>
+  <p class="subtitle" style="text-align:center;">Two ways in. One ending.<br>Search the clues or submit your answer, every path leads here.</p>
   <div class="main-actions">
     <button class="btn-primary" onclick="goToClues()">Search the Clues &rarr;</button>
     <p class="btn-divider">or</p>
@@ -667,35 +669,35 @@ const ENDINGS = {
     letter: "M",
     place: "The Moment Between Words",
     title: "Mampang",
-    scene: `In this possible path, you find yourself in <strong>Mampang</strong> — measured, intentional, unhurried. You didn't chase. You <strong>held space</strong>. And in that space, something settled between you without needing a name. They knew. You knew. The silence was full.`,
+    scene: `In this possible path, you find yourself in <strong>Mampang</strong>. Kok bisa sampai sini? Loh ndak tau kok tanya saya.`,
     fate: "M is for the moment that doesn't announce itself — it just arrives, and you were still enough to feel it."
   },
   A: {
     letter: "A",
     place: "The Arrival",
     title: "Anyer Panarukan",
-    scene: `In this possible path, you ended up in Anyer Panarukan. You <strong>moved first</strong>. You spoke first. You closed distances before they had a chance to grow. And they responded — not because they had to, but because your <strong>honesty made it easy</strong>. You didn't wait for a sign. You became one.`,
+    scene: `In this possible path, you ended up in <strong>Anyer Panarukan</strong>. Kok bisa sampai sini? Loh ndak tau kok tanya saya.`,
     fate: "A is for the one who arrives — not late, not early. Exactly when they're supposed to."
   },
   R: {
     letter: "R",
     place: "The Return",
     title: "Rangkasbitung",
-    scene: `In this possible path, you arrive in <strong>Rangkasbitung</strong>. Not a mistake, a rhythm. You moved toward and away, uncertain and then sure, and in that arc you found something more honest than a straight line ever could be. <strong>You came back</strong>. So did they.`,
+    scene: `In this possible path, you arrive in <strong>Rangkasbitung</strong>. Kok bisa sampai sini? Loh ndak tau kok tanya saya.`,
     fate: "R is for return — because the most meaningful things don't arrive in straight lines."
   },
   N: {
     letter: "N",
     place: "The Not-Yet",
     title: "Ngawi",
-    scene: `In this possible path, your destination turns out to be <strong>Ngawi</strong>. Not from fear — from a kind of careful wonder. This path didn't end in a confession or a grand gesture. It ended in <strong>possibility</strong>, intact, unruined, quietly waiting. Not every story needs its next chapter today.`,
+    scene: `In this possible path, your destination turns out to be <strong>Ngawi</strong>. Kok bisa sampai sini? Loh ndak tau kok tanya saya.`,
     fate: "N is for not yet — the most gentle and most honest ending there is."
   },
   I: {
     letter: "I",
     place: "The Impression",
     title: "Indramayu",
-    scene: `In this possible path, you are led to <strong>Indramayu</strong>. They carried you in a small way they couldn't explain. This path didn't end with you together. It ended with you <strong>unforgettable</strong>.`,
+    scene: `In this possible path, you are led to <strong>Indramayu</strong>. Kok bisa sampai sini? Loh ndak tau kok tanya saya.`,
     fate: "I is for impression — the kind that stays without asking permission."
   }
 };
