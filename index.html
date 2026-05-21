@@ -177,7 +177,7 @@
     border-radius: 4px 4px 0 0;
   }
   #screen-opening .story-text {
-    font-family: 'Inter', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 15px;
     font-style: italic;
     line-height: 1.9;
@@ -290,7 +290,7 @@
 <div id="screen-start" class="screen active">
   <p class="eyebrow">Last Possible Path</p>
   <div class="big-serif">Every<br>choice<br><em>leads here.</em></div>
-  <p class="subtitle">Seven turns. Three directions.<br>No matter which way you go, a clue has always been waiting.</p>
+  <p class="subtitle">Seven turns. Three directions.<br>No matter which way you go — a clue has always been waiting.</p>
   <button class="btn-primary" onclick="go('screen-opening')">Enter the maze &rarr;</button>
 </div>
 
@@ -351,48 +351,48 @@ const QUESTIONS = [
     title: "Mantan chat and it's 2 am you et dah. Isinya 'Lagi apa?'",
     choices: [
       { arrow: "←", label: "Ghosting",       weights: { N:2, I:1 } },
-      { arrow: "↑", label: "Bales mingdep",     weights: { M:2, N:1 } },
-      { arrow: "→", label: "Langsung bales",   weights: { A:2, R:1 } }
+      { arrow: "↑", label: "Bales mingdep",  weights: { M:2, N:1 } },
+      { arrow: "→", label: "Langsung bales", weights: { A:2, R:1 } }
     ]
   },
   {
     title: "Kalo ketemu doi di trotoar pancoran bank jbj, kalian bakal ngapain?",
     choices: [
       { arrow: "←", label: "Ngumpet ke bawah jpo", weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Pura2 gak liat",   weights: { I:2, N:1 } },
-      { arrow: "→", label: "Sapa laaah",    weights: { A:2, R:1 } }
+      { arrow: "↑", label: "Pura2 gak liat",       weights: { I:2, N:1 } },
+      { arrow: "→", label: "Sapa laaah",            weights: { A:2, R:1 } }
     ]
   },
   {
     title: "Mantan punya utang 7rb perak",
     choices: [
-      { arrow: "←", label: "Tagih", weights: { M:2, A:1 } },
+      { arrow: "←", label: "Tagih",  weights: { M:2, A:1 } },
       { arrow: "↑", label: "Lupain", weights: { I:2, M:1 } },
-      { arrow: "→", label: "Solat", weights: { R:2, N:1 } }
+      { arrow: "→", label: "Solat",  weights: { R:2, N:1 } }
     ]
   },
   {
     title: "Mantan upload foto ke pantai tempat kalian pernah date dulu",
     choices: [
-      { arrow: "←", label: "Like tweet",   weights: { N:2, I:1 } },
-      { arrow: "↑", label: "Diemin", weights: { M:2, R:1 } },
-      { arrow: "→", label: "Reply "Eh? Kayak kenal wkwkk",    weights: { A:2, R:1 } }
+      { arrow: "←", label: "Like tweet",                   weights: { N:2, I:1 } },
+      { arrow: "↑", label: "Diemin",                       weights: { M:2, R:1 } },
+      { arrow: "→", label: "Reply \"Eh? Kayak kenal wkwk\"", weights: { A:2, R:1 } }
     ]
   },
   {
     title: "Doi bilang 'kamu sekarang berubah ya.' Maksudnya??? Jawab apa",
     choices: [
-      { arrow: "←", label: "Wiiih power ranger",   weights: { I:2, N:1 } },
-      { arrow: "↑", label: "Aku skrg nyaleg",    weights: { A:2, M:1 } },
-      { arrow: "→", label: "Maaf aku main rp",    weights: { R:2, I:1 } }
+      { arrow: "←", label: "Wiiih power ranger", weights: { I:2, N:1 } },
+      { arrow: "↑", label: "Aku skrg nyaleg",   weights: { A:2, M:1 } },
+      { arrow: "→", label: "Maaf aku main rp",  weights: { R:2, I:1 } }
     ]
   },
   {
     title: "Kamu punya chance buat kenalan sama dia karena dia notice kamu, nanya soal kamu ke temen kamu. What will you do?",
     choices: [
-      { arrow: "←", label: "Gak berani gerak duluan",     weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Chat langsung",    weights: { R:2, A:1 } },
-      { arrow: "→", label: "Follow akunnya aja", weights: { I:2, R:1 } }
+      { arrow: "←", label: "Gak berani gerak duluan", weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Chat langsung",           weights: { R:2, A:1 } },
+      { arrow: "→", label: "Follow akunnya aja",      weights: { I:2, R:1 } }
     ]
   }
 ];
@@ -436,14 +436,15 @@ const ENDINGS = {
 };
 
 const PROMPTS = [
-  "Kemana kah kamu akan melangkah?",
-  "Jalan mana kah yang kamu pilih?",
-  "Sekarang pilih kemana?",
-  "Kamu mau ke mana nih?",
-  "Pilih jalan.",
-  "Satu lagi. Kemana?",
-  "Ini yang terakhir."
+  "Choose your way",
+  "Choose your way",
+  "Choose your way",
+  "Choose your way",
+  "Choose your way",
+  "Choose your way",
+  "Choose your way",
 ];
+let currentQ = 0;
 let scores = {};
 let chosen = null;
 
