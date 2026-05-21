@@ -36,6 +36,121 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── EYEBROW ── */
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 16px;
+  }
+
+  /* ── BIG SERIF ── */
+  .big-serif {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 10vw, 66px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #111;
+    margin-bottom: 24px;
+  }
+  .big-serif em { font-style: italic; color: #555; }
+
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* ── MAIN PAGE CENTERED + SMALLER TITLE ── */
+  #screen-main {
+    align-items: center;
+    text-align: center;
+  }
+  #screen-main .big-serif {
+    font-size: clamp(20px, 5vw, 32px);
+    margin-bottom: 16px;
+  }
+
+  /* ── MAIN PAGE BUTTONS ── */
+  .main-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+  .btn-primary:hover { background: #333; transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: transparent;
+    color: #111;
+    border: 1.5px solid #111;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+  .btn-secondary:hover { background: #111; color: #fff; transform: translateY(-1px); }
+
+  /* full-width equal buttons on main page only */
+  #screen-main .btn-primary,
+  #screen-main .btn-secondary {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  /* main page: both buttons same outlined style */
+  #screen-main .btn-primary {
+    background: #fff;
+    color: #111;
+    border: 1.5px solid #111;
+  }
+  #screen-main .btn-primary:hover {
+    background: #111;
+    color: #fff;
+  }
+
+  .btn-divider {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ccc;
+    text-align: center;
+  }
+
+  /* ══════════════════════════════
+     INDEX (CLUE HUNT) STYLES
+  ══════════════════════════════ */
+
   /* ── STEP BAR ── */
   .step-bar {
     display: flex;
@@ -50,16 +165,6 @@
     transition: background 0.4s;
   }
   .step-dot.done { background: #111; }
-
-  /* ── EYEBROW ── */
-  .eyebrow {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 28px;
-  }
 
   /* ── QUESTION ── */
   .q-text {
@@ -122,44 +227,6 @@
     letter-spacing: 0.02em;
   }
 
-  /* ── START SCREEN ── */
-  #screen-start .big-serif {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(40px, 10vw, 66px);
-    font-weight: 700;
-    line-height: 1.05;
-    color: #111;
-    margin-bottom: 24px;
-  }
-  #screen-start .big-serif em {
-    font-style: italic;
-    color: #555;
-  }
-  .subtitle {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.7;
-    margin-bottom: 40px;
-  }
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 32px;
-    background: #111;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    align-self: flex-start;
-  }
-  .btn-primary:hover { background: #333; transform: translateY(-1px); }
-
   /* ── OPENING STORY ── */
   #screen-opening .story-box {
     border: 1.5px solid #e0e0e0;
@@ -189,7 +256,7 @@
     color: #111;
   }
 
-  /* ── RESULT PLACE ── */
+  /* ── RESULT ── */
   .result-place {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
@@ -200,10 +267,7 @@
     text-align: center;
     margin-top: 10px;
   }
-  .clue-box-wrap {
-    margin-bottom: 28px;
-  }
-
+  .clue-box-wrap { margin-bottom: 28px; }
 
   .result-clue-label {
     font-size: 10px;
@@ -264,7 +328,13 @@
     font-size: 13px;
     color: #888;
     margin-bottom: 28px;
-    line-height: 1.6;
+  }
+
+  /* ── RESULT BUTTONS ── */
+  .result-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
   .replay-btn {
     display: inline-flex;
@@ -280,36 +350,165 @@
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
+    align-self: flex-start;
   }
   .replay-btn:hover { background: #111; color: #fff; }
+  .replay-btn.primary-btn {
+    background: #111;
+    color: #fff;
+  }
+  .replay-btn.primary-btn:hover { background: #333; }
+
+  /* ══════════════════════════════
+     POSSPATH (SUBMIT ANSWER) STYLES
+  ══════════════════════════════ */
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+  }
+
+  .pass-input {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #111;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .pass-input:focus { border-color: #111; }
+  .pass-input::placeholder { color: #ccc; font-weight: 400; letter-spacing: 0.04em; }
+
+  .hint {
+    font-size: 11px;
+    color: #bbb;
+    margin-bottom: 28px;
+  }
+
+  .warn-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #c00;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    min-height: 18px;
+    text-align: center;
+    display: none;
+  }
+  .warn-text.visible { display: block; }
+
+  .mission-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 20px;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  .reward-box {
+    border: 1.5px solid #111;
+    border-radius: 4px;
+    padding: 40px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 0;
+  }
+  .reward-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #111;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .reward-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: #111;
+    text-align: center;
+  }
+
+  /* ── POSSPATH INPUT CENTERED ── */
+  #screen-input {
+    align-items: center;
+    text-align: center;
+  }
+  #screen-input .field-label { text-align: center; width: 100%; }
+  #screen-input .btn-primary { align-self: center; }
+
+  /* ── POSSPATH HEADER ── */
+  #screen-input .posspath-header {
+    margin-bottom: 36px;
+    text-align: center;
+  }
+  #screen-input .posspath-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 10vw, 66px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #111;
+    margin-bottom: 0;
+  }
 </style>
 </head>
 <body>
 
-<!-- ══════════ START ══════════ -->
-<div id="screen-start" class="screen active">
-  <p class="eyebrow">Last Possible Path</p>
-  <div class="big-serif">Every<br>choice<br><em>leads here.</em></div>
-  <p class="subtitle">Seven turns. Three directions.<br>No matter which way you go — a clue has always been waiting.</p>
-  <button class="btn-primary" onclick="go('screen-opening')">Enter the maze &rarr;</button>
+<!-- ══════════════════════════════
+     MAIN LANDING PAGE
+══════════════════════════════ -->
+<div id="screen-main" class="screen active">
+  <p class="eyebrow" style="text-align:center;">Welcome to</p>
+  <div class="big-serif">Last Possible <em>Path.</em></div>
+  <p class="subtitle" style="text-align:center;">Two ways in. One ending.<br>Search the clues or submit your answer — every path leads here.</p>
+  <div class="main-actions">
+    <button class="btn-primary" onclick="goToClues()">Search the Clues &rarr;</button>
+    <p class="btn-divider">or</p>
+    <button class="btn-secondary" onclick="go('screen-input')">Submit Your Answer &rarr;</button>
+  </div>
 </div>
 
-<!-- ══════════ OPENING STORY ══════════ -->
+<!-- ══════════════════════════════
+     CLUE HUNT — OPENING STORY
+══════════════════════════════ -->
 <div id="screen-opening" class="screen">
   <p class="eyebrow">Last Possible Path</p>
-  <div class="story-box">
-    <p class="story-text">
-      Every choice carries a different answer, and every answer has the power to change where this story leads. Remember that there are no truly correct paths here.<br><br>
-    
-      In the next page, you will be presented with several choices.<br><br>
-    
-      So. . . which one will you choose? And will you be able to uncover the answer hidden behind it?
-    </p>
+  <div id="screen-opening" style="display:contents;">
+    <div class="story-box">
+      <p class="story-text">
+        Every choice carries a different answer, and every answer has the power to change where this story leads. Remember that there are no truly correct paths here.<br><br>
+        In the next page, you will be presented with several choices.<br><br>
+        So. . . which one will you choose? And will you be able to uncover the answer hidden behind it?
+      </p>
+    </div>
   </div>
   <button class="btn-primary" onclick="startGame()">Mulai &rarr;</button>
 </div>
 
-<!-- ══════════ QUESTION ══════════ -->
+<!-- ══════════════════════════════
+     CLUE HUNT — QUESTION
+══════════════════════════════ -->
 <div id="screen-question" class="screen">
   <div class="step-bar" id="q-step-bar"></div>
   <p class="eyebrow" id="q-eyebrow">Path 1 of 7</p>
@@ -318,7 +517,9 @@
   <div class="doors" id="q-doors"></div>
 </div>
 
-<!-- ══════════ RESULT ══════════ -->
+<!-- ══════════════════════════════
+     CLUE HUNT — RESULT
+══════════════════════════════ -->
 <div id="screen-result" class="screen">
   <div class="step-bar">
     <div class="step-dot done"></div><div class="step-dot done"></div>
@@ -336,10 +537,72 @@
     <div class="result-scene" id="res-scene">—</div>
   </div>
   <p class="fate-note" id="res-fate">—</p>
-  <button class="replay-btn" onclick="restart()">↩ Try another path</button>
+  <div class="result-btns">
+    <button class="replay-btn primary-btn" onclick="go('screen-main')">↩ Main Path</button>
+    <button class="replay-btn" onclick="goToClues()">→ Find Another Clue</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     POSSPATH — INPUT SCREEN
+══════════════════════════════ -->
+<div id="screen-input" class="screen">
+  <p class="eyebrow" style="text-align:center;">Last Possible Path</p>
+  <div class="posspath-header">
+    <div class="posspath-title">Posspath</div>
+  </div>
+
+  <p class="field-label">Masukkan Nama (Capslock)</p>
+  <input
+    class="pass-input"
+    id="pass-field"
+    type="text"
+    placeholder="NAMA KAMU"
+    autocomplete="off"
+    oninput="clearWarn()"
+    onkeydown="if(event.key==='Enter') checkPass()"
+  />
+  <p class="warn-text" id="warn-msg">salah wkwaaawoak itu nama siape mpruy</p>
+
+  <button class="btn-primary" onclick="checkPass()">Submit &rarr;</button>
+</div>
+
+<!-- ══════════════════════════════
+     POSSPATH — SUCCESS SCREEN
+══════════════════════════════ -->
+<div id="screen-success" class="screen">
+  <p class="mission-label">Screenshot foto ini dan kirim ke DM base<br>sebagai submission misi terakhir.</p>
+  <div class="reward-box">
+    <div class="reward-text">Bebek Goreng<br>HJ Slamet</div>
+  </div>
 </div>
 
 <script>
+/* ══════ NAVIGATION ══════ */
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToClues() {
+  go('screen-opening');
+}
+
+/* ══════ POSSPATH LOGIC ══════ */
+function checkPass() {
+  const val = document.getElementById('pass-field').value.trim().toUpperCase();
+  if (val === 'MARNI') {
+    go('screen-success');
+  } else {
+    document.getElementById('warn-msg').classList.add('visible');
+  }
+}
+
+function clearWarn() {
+  document.getElementById('warn-msg').classList.remove('visible');
+}
+
+/* ══════ CLUE HUNT LOGIC ══════ */
 const QUESTIONS = [
   {
     title: "Orang yang kamu taksir share Friendship CV, berani reply doi gak?",
@@ -376,8 +639,8 @@ const QUESTIONS = [
   {
     title: "Mantan upload foto ke pantai tempat kalian pernah date dulu",
     choices: [
-      { arrow: "←", label: "Like tweet",                   weights: { N:2, I:1 } },
-      { arrow: "↑", label: "Diemin",                       weights: { M:2, R:1 } },
+      { arrow: "←", label: "Like tweet",                    weights: { N:2, I:1 } },
+      { arrow: "↑", label: "Diemin",                        weights: { M:2, R:1 } },
       { arrow: "→", label: "Reply \"Eh? Kayak kenal wkwk\"", weights: { A:2, R:1 } }
     ]
   },
@@ -438,14 +701,10 @@ const ENDINGS = {
 };
 
 const PROMPTS = [
-  "CHOOSE YOUR WAY",
-  "CHOOSE YOUR WAY",
-  "CHOOSE YOUR WAY",
-  "CHOOSE YOUR WAY",
-  "CHOOSE YOUR WAY",
-  "CHOOSE YOUR WAY",
-  "CHOOSE YOUR WAY",
+  "CHOOSE YOUR WAY","CHOOSE YOUR WAY","CHOOSE YOUR WAY","CHOOSE YOUR WAY",
+  "CHOOSE YOUR WAY","CHOOSE YOUR WAY","CHOOSE YOUR WAY",
 ];
+
 let currentQ = 0;
 let scores = {};
 let chosen = null;
@@ -463,7 +722,6 @@ function renderQuestion() {
   const total = QUESTIONS.length;
   chosen = null;
 
-  // step bar
   const bar = document.getElementById('q-step-bar');
   bar.innerHTML = '';
   for (let i = 0; i < total; i++) {
@@ -476,10 +734,8 @@ function renderQuestion() {
   document.getElementById('q-title').textContent = q.title;
   document.getElementById('q-prompt').textContent = PROMPTS[currentQ] || "Pilih jalanmu.";
 
-  // doors
   const container = document.getElementById('q-doors');
   container.innerHTML = '';
-
   q.choices.forEach((c, idx) => {
     const door = document.createElement('button');
     door.className = 'door';
@@ -523,13 +779,6 @@ function showResult() {
   document.getElementById('res-fate').textContent = e.fate;
   go('screen-result');
 }
-
-function go(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function restart() { go('screen-start'); }
 </script>
 </body>
 </html>
