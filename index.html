@@ -246,7 +246,7 @@
 <div id="screen-start" class="screen active">
   <p class="eyebrow">Last Possible Path</p>
   <div class="big-serif">Every<br>choice<br><em>leads here.</em></div>
-  <p class="subtitle">Six turns. Three directions.<br>No matter which way you go — a clue has always been waiting.</p>
+  <p class="subtitle">Six turns. Three directions.<br>No matter which way you go, a clue has always been waiting.</p>
   <button class="btn-primary" onclick="startGame()">Enter the maze &rarr;</button>
 </div>
 
@@ -261,6 +261,7 @@
 <!-- ══════════ RESULT ══════════ -->
 <div id="screen-result" class="screen">
   <div class="step-bar">
+    <div class="step-dot done"></div><div class="step-dot done"></div>
     <div class="step-dot done"></div><div class="step-dot done"></div>
     <div class="step-dot done"></div><div class="step-dot done"></div>
     <div class="step-dot done"></div>
@@ -278,43 +279,59 @@
 <script>
 const QUESTIONS = [
   {
-    title: "Dia menatapmu dari seberang ruangan.",
+    title: "Doi ngelirik kamu dari ujung kelas. Serius deh.",
     choices: [
-      { arrow: "←", label: "Berpaling",      weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Tatap balik",    weights: { A:2, R:1 } },
-      { arrow: "→", label: "Tersenyum dulu", weights: { R:2, I:1 } }
+      { arrow: "←", label: "Pura buta",      weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Tatap balik gas", weights: { A:2, R:1 } },
+      { arrow: "→", label: "Senyum dikit",   weights: { R:2, I:1 } }
     ]
   },
   {
-    title: "Ada pesan masuk. Tanpa nama.",
+    title: "Doi chat jam 2 malem. 'Lagi apa?'",
     choices: [
-      { arrow: "←", label: "Abaikan",        weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Baca dua kali",  weights: { M:2, I:1 } },
-      { arrow: "→", label: "Balas saja",     weights: { A:2, R:1 } }
+      { arrow: "←", label: "Ghosting",       weights: { N:2, I:1 } },
+      { arrow: "↑", label: "Bales slow",     weights: { M:2, N:1 } },
+      { arrow: "→", label: "Gas langsung",   weights: { A:2, R:1 } }
     ]
   },
   {
-    title: "Kamu menemukan barangnya yang tertinggal.",
+    title: "Ketemu doi di minimarket. Awkward banget.",
     choices: [
-      { arrow: "←", label: "Simpan dulu",    weights: { M:2, A:1 } },
-      { arrow: "↑", label: "Titip catatan",  weights: { I:2, M:1 } },
-      { arrow: "→", label: "Kembalikan",     weights: { R:2, N:1 } }
+      { arrow: "←", label: "Kabur ke lorong", weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Sok gak liat",   weights: { I:2, N:1 } },
+      { arrow: "→", label: "Sapa duluan",    weights: { A:2, R:1 } }
     ]
   },
   {
-    title: "Dia pergi tanpa bilang apa-apa.",
+    title: "Doi ninggalin earphone di mejamu.",
     choices: [
-      { arrow: "←", label: "Biarkan pergi",  weights: { N:2, I:1 } },
-      { arrow: "↑", label: "Tunggu sebentar",weights: { M:2, N:1 } },
-      { arrow: "→", label: "Ikuti pelan",    weights: { I:2, A:1 } }
+      { arrow: "←", label: "Simpen aja deh", weights: { M:2, A:1 } },
+      { arrow: "↑", label: "Titip note receh", weights: { I:2, M:1 } },
+      { arrow: "→", label: "Langsung balikin", weights: { R:2, N:1 } }
     ]
   },
   {
-    title: "Satu pintu terakhir. Masih terbuka.",
+    title: "Story-nya itu foto sunset. Captionnya '…'",
     choices: [
-      { arrow: "←", label: "Tinggalkan",     weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Masuk saja",     weights: { R:2, A:1 } },
-      { arrow: "→", label: "Tinggal tanda",  weights: { I:2, R:1 } }
+      { arrow: "←", label: "Cukup nonton",   weights: { N:2, I:1 } },
+      { arrow: "↑", label: "React aja dulu", weights: { M:2, R:1 } },
+      { arrow: "→", label: "DM langsung",    weights: { A:2, R:1 } }
+    ]
+  },
+  {
+    title: "Doi bilang 'kamu tuh beda ya.' Maksudnya???",
+    choices: [
+      { arrow: "←", label: "Ketawa doang",   weights: { I:2, N:1 } },
+      { arrow: "↑", label: "Nanya balik",    weights: { A:2, M:1 } },
+      { arrow: "→", label: "Pura seneng",    weights: { R:2, I:1 } }
+    ]
+  },
+  {
+    title: "Hari terakhir. Doi masih di sana.",
+    choices: [
+      { arrow: "←", label: "Pergi diam",     weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Deketin gas",    weights: { R:2, A:1 } },
+      { arrow: "→", label: "Slip note receh", weights: { I:2, R:1 } }
     ]
   }
 ];
@@ -378,7 +395,7 @@ function renderQuestion() {
     bar.appendChild(d);
   }
 
-  document.getElementById('q-eyebrow').textContent = `Path ${currentQ + 1} of 5`;
+  document.getElementById('q-eyebrow').textContent = `Path ${currentQ + 1} of 7`;
   document.getElementById('q-title').textContent = q.title;
 
   // doors
