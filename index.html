@@ -160,7 +160,51 @@
   }
   .btn-primary:hover { background: #333; transform: translateY(-1px); }
 
-  /* ── RESULT ── */
+  /* ── OPENING STORY ── */
+  #screen-opening .story-box {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 28px 24px;
+    margin-bottom: 36px;
+    position: relative;
+  }
+  #screen-opening .story-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #111;
+    border-radius: 4px 4px 0 0;
+  }
+  #screen-opening .story-text {
+    font-family: 'Inter', serif;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.9;
+    color: #333;
+  }
+  #screen-opening .story-text em {
+    font-style: normal;
+    font-weight: 700;
+    color: #111;
+  }
+
+  /* ── RESULT PLACE ── */
+  .result-place {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #888;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .clue-box-wrap {
+    margin-bottom: 28px;
+  }
+
+
   .result-clue-label {
     font-size: 10px;
     font-weight: 600;
@@ -246,15 +290,29 @@
 <div id="screen-start" class="screen active">
   <p class="eyebrow">Last Possible Path</p>
   <div class="big-serif">Every<br>choice<br><em>leads here.</em></div>
-  <p class="subtitle">Six turns. Three directions.<br>No matter which way you go, a clue has always been waiting.</p>
-  <button class="btn-primary" onclick="startGame()">Enter the maze &rarr;</button>
+  <p class="subtitle">Seven turns. Three directions.<br>No matter which way you go, a clue has always been waiting.</p>
+  <button class="btn-primary" onclick="go('screen-opening')">Enter the maze &rarr;</button>
+</div>
+
+<!-- ══════════ OPENING STORY ══════════ -->
+<div id="screen-opening" class="screen">
+  <p class="eyebrow">Last Possible Path</p>
+  <div class="story-box">
+    <p class="story-text">
+      Kamu terbangun di sebuah <em>ruangan misterius</em>. Tidak ada apa pun di ruangan itu selain satu pintu yang berdiri tepat di depanmu, seolah-olah pintu itu memang sengaja disiapkan sebagai satu-satunya jalan keluar kamu dari ruangan itu.<br><br>
+      Saat pintu itu terbuka, terdapat <em>tiga jalan</em> yang mengarah ke kanan, kiri, dan lurus ke depan — tanpa ujung yang terlihat.<br><br>
+      Kemana kah kamu akan melangkah?
+    </p>
+  </div>
+  <button class="btn-primary" onclick="startGame()">Mulai &rarr;</button>
 </div>
 
 <!-- ══════════ QUESTION ══════════ -->
 <div id="screen-question" class="screen">
   <div class="step-bar" id="q-step-bar"></div>
-  <p class="eyebrow" id="q-eyebrow">Path 1 of 6</p>
+  <p class="eyebrow" id="q-eyebrow">Path 1 of 7</p>
   <div class="q-text" id="q-title">—</div>
+  <p class="subtitle" id="q-prompt" style="margin-bottom:28px;">—</p>
   <div class="doors" id="q-doors"></div>
 </div>
 
@@ -267,7 +325,10 @@
     <div class="step-dot done"></div>
   </div>
   <p class="result-clue-label">In this path, you've possibly met one of the clue</p>
-  <div class="clue-box"><div class="clue-letter" id="res-letter">—</div></div>
+  <div class="clue-box-wrap">
+    <div class="clue-box"><div class="clue-letter" id="res-letter">—</div></div>
+    <p class="result-place" id="res-place">—</p>
+  </div>
   <div class="result-card">
     <div class="result-title" id="res-ending-title">—</div>
     <div class="result-scene" id="res-scene">—</div>
@@ -279,59 +340,59 @@
 <script>
 const QUESTIONS = [
   {
-    title: "Doi ngelirik kamu dari ujung kelas. Serius deh.",
+    title: "Orang yang kamu taksir share Friendship CV, berani reply doi gak?",
     choices: [
-      { arrow: "←", label: "Pura buta",      weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Tatap balik gas", weights: { A:2, R:1 } },
-      { arrow: "→", label: "Senyum dikit",   weights: { R:2, I:1 } }
+      { arrow: "←", label: "Gak reply",      weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Reply langsung", weights: { A:2, R:1 } },
+      { arrow: "→", label: "Lewat mutual",   weights: { R:2, I:1 } }
     ]
   },
   {
-    title: "Doi chat jam 2 malem. 'Lagi apa?'",
+    title: "Mantan chat and it's 2 am you et dah. Isinya 'Lagi apa?'",
     choices: [
       { arrow: "←", label: "Ghosting",       weights: { N:2, I:1 } },
-      { arrow: "↑", label: "Bales slow",     weights: { M:2, N:1 } },
-      { arrow: "→", label: "Gas langsung",   weights: { A:2, R:1 } }
+      { arrow: "↑", label: "Bales mingdep",     weights: { M:2, N:1 } },
+      { arrow: "→", label: "Langsung bales",   weights: { A:2, R:1 } }
     ]
   },
   {
-    title: "Ketemu doi di minimarket. Awkward banget.",
+    title: "Kalo ketemu doi di trotoar pancoran bank jbj, kalian bakal ngapain?",
     choices: [
-      { arrow: "←", label: "Kabur ke lorong", weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Sok gak liat",   weights: { I:2, N:1 } },
-      { arrow: "→", label: "Sapa duluan",    weights: { A:2, R:1 } }
+      { arrow: "←", label: "Ngumpet ke bawah jpo", weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Pura2 gak liat",   weights: { I:2, N:1 } },
+      { arrow: "→", label: "Sapa laaah",    weights: { A:2, R:1 } }
     ]
   },
   {
-    title: "Doi ninggalin earphone di mejamu.",
+    title: "Mantan punya utang 7rb perak",
     choices: [
-      { arrow: "←", label: "Simpen aja deh", weights: { M:2, A:1 } },
-      { arrow: "↑", label: "Titip note receh", weights: { I:2, M:1 } },
-      { arrow: "→", label: "Langsung balikin", weights: { R:2, N:1 } }
+      { arrow: "←", label: "Tagih", weights: { M:2, A:1 } },
+      { arrow: "↑", label: "Lupain", weights: { I:2, M:1 } },
+      { arrow: "→", label: "Solat", weights: { R:2, N:1 } }
     ]
   },
   {
-    title: "Story-nya itu foto sunset. Captionnya '…'",
+    title: "Mantan upload foto ke pantai tempat kalian pernah date dulu",
     choices: [
-      { arrow: "←", label: "Cukup nonton",   weights: { N:2, I:1 } },
-      { arrow: "↑", label: "React aja dulu", weights: { M:2, R:1 } },
-      { arrow: "→", label: "DM langsung",    weights: { A:2, R:1 } }
+      { arrow: "←", label: "Like tweet",   weights: { N:2, I:1 } },
+      { arrow: "↑", label: "Diemin", weights: { M:2, R:1 } },
+      { arrow: "→", label: "Reply "Eh? Kayak kenal wkwkk",    weights: { A:2, R:1 } }
     ]
   },
   {
-    title: "Doi bilang 'kamu tuh beda ya.' Maksudnya???",
+    title: "Doi bilang 'kamu sekarang berubah ya.' Maksudnya??? Jawab apa",
     choices: [
-      { arrow: "←", label: "Ketawa doang",   weights: { I:2, N:1 } },
-      { arrow: "↑", label: "Nanya balik",    weights: { A:2, M:1 } },
-      { arrow: "→", label: "Pura seneng",    weights: { R:2, I:1 } }
+      { arrow: "←", label: "Wiiih power ranger",   weights: { I:2, N:1 } },
+      { arrow: "↑", label: "Aku skrg nyaleg",    weights: { A:2, M:1 } },
+      { arrow: "→", label: "Maaf aku main rp",    weights: { R:2, I:1 } }
     ]
   },
   {
-    title: "Hari terakhir. Doi masih di sana.",
+    title: "Kamu punya chance buat kenalan sama dia karena dia notice kamu, nanya soal kamu ke temen kamu. What will you do?",
     choices: [
-      { arrow: "←", label: "Pergi diam",     weights: { N:2, M:1 } },
-      { arrow: "↑", label: "Deketin gas",    weights: { R:2, A:1 } },
-      { arrow: "→", label: "Slip note receh", weights: { I:2, R:1 } }
+      { arrow: "←", label: "Gak berani gerak duluan",     weights: { N:2, M:1 } },
+      { arrow: "↑", label: "Chat langsung",    weights: { R:2, A:1 } },
+      { arrow: "→", label: "Follow akunnya aja", weights: { I:2, R:1 } }
     ]
   }
 ];
@@ -339,37 +400,50 @@ const QUESTIONS = [
 const ENDINGS = {
   M: {
     letter: "M",
+    place: "Mampang",
     title: "The Moment Between Words",
     scene: `Every path you took was <strong>quiet</strong> — measured, intentional, unhurried. You didn't chase. You <strong>held space</strong>. And in that space, something settled between you without needing a name. They knew. You knew. The silence was full.`,
     fate: "M is for the moment that doesn't announce itself — it just arrives, and you were still enough to feel it."
   },
   A: {
     letter: "A",
+    place: "Anyer Panarukan",
     title: "The Arrival",
     scene: `You <strong>moved first</strong>. You spoke first. You closed distances before they had a chance to grow. And they responded — not because they had to, but because your <strong>honesty made it easy</strong>. You didn't wait for a sign. You became one.`,
     fate: "A is for the one who arrives — not late, not early. Exactly when they're supposed to."
   },
   R: {
     letter: "R",
+    place: "Rangkasbitung",
     title: "The Return",
     scene: `Something about your path kept <strong>circling back</strong>. Not a mistake — a rhythm. You moved toward and away, uncertain and then sure, and in that arc you found something more honest than a straight line ever could be. <strong>You came back</strong>. So did they.`,
     fate: "R is for return — because the most meaningful things don't arrive in straight lines."
   },
   N: {
     letter: "N",
+    place: "Ngawi",
     title: "The Not-Yet",
     scene: `You held back. You <strong>watched more than you moved</strong>. Not from fear — from a kind of careful wonder. This path didn't end in a confession or a grand gesture. It ended in <strong>possibility</strong>, intact, unruined, quietly waiting. Not every story needs its next chapter today.`,
     fate: "N is for not yet — the most gentle and most honest ending there is."
   },
   I: {
     letter: "I",
+    place: "Indramayu",
     title: "The Impression",
     scene: `You left something behind — a note, a song, a look that lasted a second too long. <strong>You were felt before you were known</strong>. They carried you in a small way they couldn't explain. This path didn't end with you together. It ended with you <strong>unforgettable</strong>.`,
     fate: "I is for impression — the kind that stays without asking permission."
   }
 };
 
-let currentQ = 0;
+const PROMPTS = [
+  "Kemana kah kamu akan melangkah?",
+  "Jalan mana kah yang kamu pilih?",
+  "Sekarang pilih kemana?",
+  "Kamu mau ke mana nih?",
+  "Pilih jalan.",
+  "Satu lagi. Kemana?",
+  "Ini yang terakhir."
+];
 let scores = {};
 let chosen = null;
 
@@ -397,6 +471,7 @@ function renderQuestion() {
 
   document.getElementById('q-eyebrow').textContent = `Path ${currentQ + 1} of 7`;
   document.getElementById('q-title').textContent = q.title;
+  document.getElementById('q-prompt').textContent = PROMPTS[currentQ] || "Pilih jalanmu.";
 
   // doors
   const container = document.getElementById('q-doors');
@@ -439,6 +514,7 @@ function showResult() {
   for (const k of order) if (scores[k] > scores[winner]) winner = k;
   const e = ENDINGS[winner];
   document.getElementById('res-letter').textContent = e.letter;
+  document.getElementById('res-place').textContent = e.place;
   document.getElementById('res-ending-title').textContent = e.title;
   document.getElementById('res-scene').innerHTML = e.scene;
   document.getElementById('res-fate').textContent = e.fate;
